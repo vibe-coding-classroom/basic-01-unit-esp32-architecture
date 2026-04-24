@@ -1,5 +1,3 @@
-Viewed basic-01-unit-esp32-architecture.html:1-405
-
 針對 **`basic-01-unit-esp32-architecture` (ESP32 架構導覽)** 單元，這是學員與「電子大腦」的第一次親密接觸。它要求學員從觀察硬體佈局開始，進而透過程式碼提取晶片的「數位 DNA」（核心數、MAC 地址），並完成第一次具備邏輯意義的「摩斯密碼閃爍」。這不僅是燒錄測試，更是建立 **軟硬體交互感知** 的關鍵起點。
 
 以下是在 **GitHub Classroom** 部署其作業 (Assignments) 的具體建議：
