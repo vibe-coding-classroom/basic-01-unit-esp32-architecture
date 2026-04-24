@@ -1,0 +1,64 @@
+name: GitHub Classroom Autograding
+on: [push]
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  grading:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check Project Structure
+        id: structure
+        uses: education/autograding-command-grader@v1
+        with:
+          test-name: Project Structure
+          setup-command: ''
+          command: 'test -f platformio.ini && test -f src/main.cpp && test -f include/soc_report.h'
+          timeout: 1
+          max-score: 25
+
+      - name: Check DNA Extraction API
+        id: dna-api
+        uses: education/autograding-command-grader@v1
+        with:
+          test-name: DNA Extraction API
+          setup-command: ''
+          command: 'grep -E "esp_chip_info|esp_read_mac" src/main.cpp'
+          timeout: 1
+          max-score: 25
+
+      - name: Check Morse Code API
+        id: morse-api
+        uses: education/autograding-command-grader@v1
+        with:
+          test-name: Morse Code API
+          setup-command: ''
+          command: 'grep -E "digitalWrite|delay" src/main.cpp'
+          timeout: 1
+          max-score: 25
+
+      - name: Check Documentation Files
+        id: docs
+        uses: education/autograding-command-grader@v1
+        with:
+          test-name: Documentation Files
+          setup-command: ''
+          command: 'test -d docs && test -d assets'
+          timeout: 1
+          max-score: 25
+
+      - name: Autograding Reporter
+        uses: education/autograding-grading-reporter@v1
+        env:
+          STRUCTURE_RESULTS: "${{steps.structure.outputs.result}}"
+          DNA-API_RESULTS: "${{steps.dna-api.outputs.result}}"
+          MORSE-API_RESULTS: "${{steps.morse-api.outputs.result}}"
+          DOCS_RESULTS: "${{steps.docs.outputs.result}}"
+        with:
+          runners: structure,dna-api,morse-api,docs
