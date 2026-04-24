@@ -1,58 +1,63 @@
-針對 **`basic-01-unit-esp32-architecture` (ESP32 架構導覽)** 單元，這是學員與「電子大腦」的第一次親密接觸。它要求學員從觀察硬體佈局開始，進而透過程式碼提取晶片的「數位 DNA」（核心數、MAC 地址），並完成第一次具備邏輯意義的「摩斯密碼閃爍」。這不僅是燒錄測試，更是建立 **軟硬體交互感知** 的關鍵起點。
+# ESP32 架構導覽與 DNA 提取報告
 
-以下是在 **GitHub Classroom** 部署其作業 (Assignments) 的具體建議：
-
-### 1. 範本倉庫 (Template Repo) 配置建議
-此單元強調對晶片內部資源的「偵查」，範本應提供標準化的回報結構，建議包含：
-*   **📂 `src/main.cpp`**：**核心實作區**。預設空的 `setup()` 與 `loop()`，並提供 `TODO` 標籤引導學員實作「SOS 閃爍邏輯」與「系統資訊打印函數」。
-*   **📂 `include/soc_report.h`**：定義一個結構體，讓學員將讀取到的晶片參數（如 `cpu_cores`, `flash_size`）填入並統一格式輸出。
-*   **📂 `docs/BOOT_LOG.md`**：開機日誌分析區。學員需將序列監視器捕獲到的原始 Bootloader 資訊貼在此處，並標註出其中的關鍵訊息（如：Flash Speed, Crystal Hz）。
-*   **📂 `assets/`**：多媒體附件區。學員需在此存放「SOS 閃爍影片/GIF」以及一張標註了實體 RESET 與 BOOT 鍵位置的開發板照片。
+這是你與 ESP32 「電子大腦」的第一次親密接觸。本單元要求你從觀察硬體佈局開始，進而透過程式碼提取晶片的「數位 DNA」，並完成第一次摩斯密碼閃爍測試。
 
 ---
 
-### 2. 作業任務部署細節
+## 1. 硬體觀察 (Hardware Observation)
+請在 `assets/` 資料夾中存放一張你的開發板照片，並在此處展示。
 
-#### 任務 1：摩斯密碼與燒錄測試 (Morse Code & Flashing Lab)
-*   **目標**：確保開發環境完全打通，並能透過精確的時序控制（`delay()`）操作實體 GPIO。
-*   **Classroom 部署建議**：
-    *   **SOS 邏輯挑戰**：學員需修改程式碼，讓板載 LED 依據摩斯密碼（··· ——— ···）閃爍。
-    *   **燒錄自檢**：學員需在 README 中記錄：燒錄過程中是否需要手動按住 BOOT 鍵？（這有助於理解啟動模式切換）。
-    *   **提交結果**：在 README 中插入閃爍演示連結。
+![開發板標註圖](assets/board_map.jpg)
+> **任務**：請在照片中標註出 **RESET** 與 **BOOT** 鍵的位置。
 
-#### 任務 2：串口偵探：提取數位 DNA (Serial Detective: DNA Extraction Lab)
-*   **目標**：學會調用底層 API (ESP-IDF) 探索硬體資源限界。
-*   **Classroom 部署建議**：
-    *   **API 調用實踐**：引入 `esp_system.h`。學員需寫出能印出雙核資訊、晶片版本與唯一 MAC 地址的代碼。
-    *   **數據核對**：截圖序列監視器的輸出，並與開發板外殼上的標籤進行比對驗證。
-    *   **驗證要點**：輸出的 MAC 地址是否格式正確且具備唯一性？
-
-#### 任務 3：啟動日誌診斷與熱傳導觀察 (Bootlog & Thermal Audit Lab)
-*   **目標**：理解 Bootloader 的作用，並對電子元件的「能量消耗與發熱量」建立物理直覺。
-*   **Classroom 部署建議**：
-    *   **日誌解析**：分析開機第一秒的日誌。找出 `Flash Mode` 是 DIO 還是 QIO？這決定了存取速度。
-    *   **溫升觀測**：啟動一個 WiFi 掃描循環，學員需觀察 5 分鐘後晶片屏蔽蓋的溫升感受。
-    *   **硬體定位**：提交一張照片，標示出 RESET（重啟）與 BOOT（進入燒錄模式）這兩個關鍵物理按鍵。
+**燒錄自檢**：
+- 在燒錄過程中，你是否需要手動按住 BOOT 鍵？ [ 是 / 否 ]
+- 你的開發板型號是：________________
 
 ---
 
-### 3. 硬體架構初學者導師點評標準 (Architecture & Observation Standards)
-此單元的價值在於 **「對硬體資源的邊界感與物理運作的覺察力」**：
-*   [ ] **代碼完整性**：是否成功調用了 `ESP.getChipRevision()` 等關鍵 API？
-*   [ ] **時間邏輯準確度**：SOS 閃爍的長短音與間隔是否符合標準摩斯時序？
-*   [ ] **細節觀察力**：是否能在 Bootloader 日誌中正確提取出晶片的運作頻率（如 240MHz）？
+## 2. 數位 DNA 提取 (DNA Extraction)
+請將 `src/main.cpp` 執行後的串口輸出截圖或文字貼在此處。
 
-### 📁 推薦範本結構 (GitHub Classroom Template)：
 ```text
-.
-├── src/main.cpp         # 核心：SOS 邏輯與 DNA 提取程式碼
-├── include/soc_report.h # 定義：標準化晶片資訊回報格式
-├── docs/BootAnalysis.md # 分析：Bootloader 關鍵資訊擷取筆記
-├── README.md            # 總結：我與 ESP32 的第一次數位對話報告
-└── assets/board_map.jpg # 圖片：標註 RESET/BOOT 鍵的物理位置圖
+// Paste your DNA Report here
 ```
 
-透過這種部署方式，學生能體驗到 **「好的工程師，是能聽懂晶片在開機那瞬間發出的『低語』，並能教導它如何與物理世界通訊的人」**。掌握 ESP32 架構與觀察方法後，學員將擁有了管理「複雜硬體專案」最專業的一塊底牌！_
-|
-|
-太精采了！這已經是今日對 **基礎 01**（連線、架構）單元的深度流程定義。這不僅讓課程更有質感，也確保了學生在初期就能養成專業的工程習慣！恭喜！
+**驗證點**：
+- 你的 MAC 地址與開發板標籤（如有）是否一致？
+- 你的 ESP32 是單核 (Single-core) 還是雙核 (Dual-core)？
+
+---
+
+## 3. 摩斯密碼測試 (Morse Code Lab)
+請上傳一段 SOS 閃爍的影片或 GIF 到 `assets/`，並在此連結。
+
+[SOS 閃爍演示影片](assets/sos_demo.mp4)
+
+**時序記錄**：
+- Dot (點) 持續時間：______ ms
+- Dash (橫) 持續時間：______ ms
+
+---
+
+## 4. 啟動日誌分析 (Bootloader Analysis)
+詳細分析請見 [docs/BootAnalysis.md](docs/BootAnalysis.md)。
+
+**快速總結**：
+- Flash Mode: ______
+- Crystal Frequency: ______
+
+---
+
+## 5. 熱傳導觀測 (Thermal Audit)
+啟動 WiFi 掃描循環 5 分鐘後，觸摸晶片屏蔽蓋的感覺：
+> [ ] 無感 (Cool)
+> [ ] 微溫 (Warm)
+> [ ] 燙手 (Hot)
+
+---
+
+### 導師點評 (Instructor Feedback)
+*   [ ] 代碼完整性
+*   [ ] 時間邏輯準確度
+*   [ ] 細節觀察力
